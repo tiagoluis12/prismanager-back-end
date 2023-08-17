@@ -1,6 +1,7 @@
-
 import express from "express";
 const app = express();
+
+const dotenvsafe = require("dotenv-safe").config();
 
 import cors from "cors";
 app.use(cors());
