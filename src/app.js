@@ -1,7 +1,8 @@
 import express from "express";
 const app = express();
 
-const dotenvsafe = require("dotenv-safe").config();
+import dotenv from "dotenv-safe";
+dotenv.config();
 
 import cors from "cors";
 app.use(cors());
@@ -16,5 +17,8 @@ app.use("/users", routes);
 
 import routes2 from "./routes/clientRoutes.js";
 app.use("/clients", routes2);
+
+import routes3 from "./routes/authRoutes.js";
+app.use("/auth", routes3);
 
 export default app;

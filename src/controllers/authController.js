@@ -1,4 +1,4 @@
-import UserSchema from "../models/userSchema";
+import UserSchema from "../models/userSchema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -22,9 +22,9 @@ const login = (req, res) => {
         return res.status(401).send({ message: "Invalid password" });
       }
 
-      const token = jwt.sign({ name: user.name }, SECRET);
+      const token = jwt.sign({ id: user._id }, SECRET);
 
-      res.status(200).send({ message: "Login not authorized", token });
+      res.status(200).send({ message: "Login authorized", token });
     });
   } catch (e) {
     console.log.error(e);

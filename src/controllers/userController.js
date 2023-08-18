@@ -3,28 +3,29 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const SECRET = process.env.SECRET;
-const authHeader = request.get("authorization");
 
 //READ
 const getAll = (req, res) => {
   const authHeader = req.get("authorization");
-  const token = authHeader.split(" ")[1];
 
-  if (!token) {
+  if (!authHeader) {
     return res.status(401).send("header error");
   }
 
-  jwt.verify(token, SECRET, (error) => {
+  const token = authHeader.split(" ")[1];
+
+  jwt.verify(authHeader, SECRET, async (error, decoded) => {
+    console.log(decoded);
     if (error) {
       return res.status(401).send("Not Authorized");
     }
-  });
 
-  UserSchema.find(function (err, users) {
-    if (err) {
-      res.status(500).send({ message: err.nessage });
+    const user = await UserSchema.findById(decoded.id);
+    console.log(user, decoded.id);
+    if (!user) {
+      return res.status(404).send("Not Authorized");
     }
-    res.status(200).send(users);
+    res.status(200).send(user);
   });
 };
 
