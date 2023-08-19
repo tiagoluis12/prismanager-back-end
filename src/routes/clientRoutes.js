@@ -13,6 +13,6 @@ router.post("/", controller.createClient);
 router.patch("/:id", controller.updateClientById);
 
 //DELETE]
-router.patch("/", controller.removeClientById);
+router.delete("/:id", controller.removeClientById);
 
 export default router;
