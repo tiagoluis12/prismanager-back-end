@@ -31,9 +31,44 @@ const createClient = async (req, res) => {
   }
 };
 
+// UPDATED
+const updateClientById = async (req, res) => {
+  try {
+    //acess the id user and find the user on the database then update the user
+    //findByIdAndUpdate() document id, information to update
+    const updateClientById = await ClientSchema.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
 
+    // send a response
+    res.status(200).send({
+      message: "Client updated",
+      statusCode: 200,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: error.message });
+  }
+};
+
+//DELETE
+const removeClientById = async (req, res) => {
+  try {
+    await ClientSchema.findByIdAndDelete(req.params.id);
+    res.status(200).send({
+      message: "Client deleted",
+      statusCode: 200,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: error.message });
+  }
+};
 
 export default {
   getClientAll,
   createClient,
+  updateClientById,
+  removeClientById
 };
