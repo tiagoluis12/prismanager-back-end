@@ -6,14 +6,13 @@ const clientSchema = new mongoose.Schema(
     name: {
       type: String,
     },
-    contatos: [
+    contacts: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "contactSchema",
+        ref: "Contact",
       },
     ],
   },
   { timestamps: true }
 );
-
-export default mongoose.model("Clients", clientSchema);
+export default mongoose.model("Client", clientSchema);
