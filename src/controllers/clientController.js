@@ -2,35 +2,36 @@ import ClientSchema from "../models/clientSchema.js";
 
 //READ
 const getClientAll = (req, res) => {
-  ClientSchema.find(function (err, clients) {
-    if (err) {
-      res.status(500).send({ message: err.message });
-    }
-
-    res.status(200).send(clients);
-  });
+  ClientSchema.find()
+    .populate()
+    .exec(function (err, clients) {
+      if (err) {
+        res.status(500).send({ message: err.message });
+      }
+      res.status(200).send(clients);
+    });
 };
 
 //CREATE  -  criar novos usuários
 const createClient = async (req, res) => {
   try {
-
     const newClient = new ClientSchema(req.body);
-    const savedClient = await newClient.save()
+    const savedClient = await newClient.save();
+
+    //necessário criar um ID no schema de Contato
 
     res.status(201).send({
-      "message": "Client Created",
-      "statusCode": 201,
-      "data": savedClient,
-    })
+      message: "Client Created",
+      statusCode: 201,
+      data: savedClient,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).send({
-      "message": error.message,
-    })
+      message: error.message,
+    });
   }
 };
-
 // UPDATED
 const updateClientById = async (req, res) => {
   try {
@@ -53,7 +54,7 @@ const updateClientById = async (req, res) => {
 };
 
 //DELETE
-const removeClientById = async (req, res) => {
+async function removeClientById(req, res) {
   try {
     await ClientSchema.findByIdAndDelete(req.params.id);
     res.status(200).send({
@@ -64,11 +65,11 @@ const removeClientById = async (req, res) => {
     console.error(error);
     res.status(500).send({ message: error.message });
   }
-};
+}
 
 export default {
   getClientAll,
   createClient,
   updateClientById,
-  removeClientById
+  removeClientById,
 };

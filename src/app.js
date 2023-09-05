@@ -21,4 +21,7 @@ app.use("/clients", routes2);
 import routes3 from "./routes/authRoutes.js";
 app.use("/auth", routes3);
 
+import contactRoutes from "./routes/contactRoutes.js";
+app.use("/clients/contacts", contactRoutes);
+
 export default app;
