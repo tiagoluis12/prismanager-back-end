@@ -24,4 +24,7 @@ app.use("/auth", routes3);
 // import contactRoutes from "./routes/contactRoutes.js";
 // app.use("/clients/contacts", contactRoutes);
 
+import requestRoute from "./routes/requestRoutes.js";
+app.use("/request", requestRoute);
+
 export default app;
