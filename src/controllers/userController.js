@@ -4,6 +4,22 @@ import jwt from "jsonwebtoken";
 
 const SECRET = process.env.SECRET;
 
+// New function to get all users
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await UserSchema.find({ role: "user" }).select("-password"); // Retrieve all users from the database
+
+    if (!users) {
+      return res.status(404).send("No users found");
+    }
+
+    res.status(200).send(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: error.message });
+  }
+};
+
 //READ
 const getAll = (req, res) => {
   const authHeader = req.get("authorization");
@@ -89,4 +105,5 @@ export default {
   createUser,
   updateUserById,
   deleteUserById,
+  getAllUsers,
 };
