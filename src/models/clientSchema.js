@@ -16,5 +16,11 @@ const clientSchema = new mongoose.Schema({
       ref: "Contact",
     },
   ],
+  order: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Order",
+    },
+  ],
 });
 export default mongoose.model("Client", clientSchema);

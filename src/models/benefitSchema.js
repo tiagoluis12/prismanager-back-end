@@ -5,10 +5,6 @@ const benefitSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  Cost: {
-    type: String,
-    required: true,
-  },
 });
 
 export default mongoose.model("Benefit", benefitSchema);

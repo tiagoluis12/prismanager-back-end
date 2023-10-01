@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-const requestSchema = new mongoose.Schema({
+const orderSchema = new mongoose.Schema({
+  id: mongoose.Schema.Types.ObjectId,
   adults: {
     type: Number,
   },
@@ -14,12 +15,12 @@ const requestSchema = new mongoose.Schema({
     type: Date,
   },
   plane: {
-    type: boolean,
+    type: Boolean,
   },
   planeCost: {
     type: Number,
   },
-  status: {
+  state: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Status",
   },
@@ -39,4 +40,4 @@ const requestSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("Request", requestSchema);
+export default mongoose.model("Order", orderSchema);

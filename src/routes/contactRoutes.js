@@ -1,7 +1,7 @@
 // import express from "express";
 // const router = express.Router();
 
-// import controller from "../controllers/contactController.js";
+// import controller from "../controllers/listClientController.js";
 
 // // READ - leitura de todos os usuários
 // router.get("/", controller.getContactAll);

@@ -1,18 +1,26 @@
 import Client from "../models/clientSchema.js";
 import Contact from "../models/contactSchema.js";
 import Address from "../models/addressSchema.js";
+import ListClient from "../models/listClientSchema.js";
 
 //READ
 const getClientAll = async (req, res) => {
   try {
-    const clients = await Client.find().populate({
-      path: "contacts",
-      select: "email telephone address",
+    const listClients = await ListClient.find().populate({
+      path: "client",
       populate: {
-        path: "address",
-        model: "Address",
+        path: "contacts",
+        select: "email telephone address",
+        populate: {
+          path: "address",
+          model: "Address",
+        },
       },
     });
+
+    // Acessar os clientes associados aos listClients
+    const clients = listClients.map((listClient) => listClient.client);
+
     res.status(200).send(clients);
   } catch (error) {
     console.error(error);
