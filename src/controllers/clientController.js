@@ -1,13 +1,25 @@
 import Client from "../models/clientSchema.js";
 import Contact from "../models/contactSchema.js";
+import Address from "../models/addressSchema.js";
+import ListClient from "../models/listClientSchema.js";
 
 //READ
 const getClientAll = async (req, res) => {
   try {
-    const clients = await Client.find().populate({
-      path: "contacts",
-      select: "celular",
+    const listClients = await ListClient.find().populate({
+      path: "client",
+      populate: {
+        path: "contacts",
+        select: "email telephone address",
+        populate: {
+          path: "address",
+          model: "Address",
+        },
+      },
     });
+
+    // Acessar os clientes associados aos listClients
+    const clients = listClients.map((listClient) => listClient.client);
 
     res.status(200).send(clients);
   } catch (error) {
@@ -21,15 +33,28 @@ const createClient = async (req, res) => {
     // Primeiro, crie o cliente como você fez anteriormente
     const newClient = new Client({
       name: req.body.name,
+      CPF: req.body.CPF,
     });
-
     const savedClient = await newClient.save();
 
     // Agora, crie os contatos e associe-os ao cliente
     const contactIds = [];
     for (const contactData of req.body.contacts) {
+      const newAddress = new Address({
+        state: contactData.address.state,
+        city: contactData.address.city,
+        neighborhood: contactData.address.neighborhood,
+        street: contactData.address.street,
+        number: contactData.address.number,
+        complement: contactData.address.complement,
+      });
+
+      const savedAddress = await newAddress.save();
+
       const newContact = new Contact({
-        celular: contactData.celular,
+        email: contactData.email,
+        telephone: contactData.telephone,
+        address: savedAddress._id,
       });
 
       const savedContact = await newContact.save();
@@ -42,11 +67,16 @@ const createClient = async (req, res) => {
 
     // Use populate para obter os detalhes completos dos contatos
     const clientePopulado = await Client.populate(savedClient, "contacts");
+    const addressPopulate = await Address.populate(
+      savedClient,
+      "contacts.address"
+    );
 
     res.status(201).send({
       message: "Client Created",
       statusCode: 201,
       data: clientePopulado,
+      addressData: addressPopulate,
     });
   } catch (error) {
     console.error(error);
@@ -91,34 +121,9 @@ async function removeClientById(req, res) {
   }
 }
 
-async function removeAllData(req, res) {
-  try {
-    // Certifique-se de que a URL da conexão corresponda à sua configuração.
-    await mongoose.connect("mongodb://localhost/seu-banco-de-dados", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-
-    // Exclua a base de dados inteira
-    await mongoose.connection.db.dropDatabase();
-
-    res.status(200).send({
-      message: "Base de dados excluída com sucesso",
-      statusCode: 200,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: error.message });
-  } finally {
-    // Certifique-se de desconectar após a exclusão da base de dados
-    mongoose.disconnect();
-  }
-}
-
 export default {
   getClientAll,
   updateClientById,
   removeClientById,
   createClient,
-  removeAllData,
 };

@@ -15,13 +15,22 @@ db.connect();
 import routes from "./routes/userRoutes.js";
 app.use("/users", routes);
 
-import routes2 from "./routes/clientRoutes.js";
-app.use("/clients", routes2);
+import clientRoute from "./routes/clientRoutes.js";
+app.use("/listClients/clients", clientRoute);
 
 import routes3 from "./routes/authRoutes.js";
 app.use("/auth", routes3);
 
-import contactRoutes from "./routes/contactRoutes.js";
-app.use("/clients/contacts", contactRoutes);
+// import contactRoutes from "./routes/contactRoutes.js";
+// app.use("/clients/contacts", contactRoutes);
+
+import orderRoute from "./routes/orderRoutes.js";
+app.use("/orders", orderRoute);
+
+import listClientRoute from "./routes/listClientRoutes.js";
+app.use("/listClients", listClientRoute);
+
+import statusRoute from "./routes/statusRoutes.js";
+app.use("/status", statusRoute);
 
 export default app;
