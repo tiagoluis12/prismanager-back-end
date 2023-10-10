@@ -11,7 +11,6 @@ app.use(express.json());
 import db from "./config/database.js";
 db.connect();
 
-//definir a rota prinicpal
 import routes from "./routes/userRoutes.js";
 app.use("/users", routes);
 
@@ -21,9 +20,6 @@ app.use("/listClients/clients", clientRoute);
 import routes3 from "./routes/authRoutes.js";
 app.use("/auth", routes3);
 
-// import contactRoutes from "./routes/contactRoutes.js";
-// app.use("/clients/contacts", contactRoutes);
-
 import orderRoute from "./routes/orderRoutes.js";
 app.use("/orders", orderRoute);
 
@@ -32,5 +28,11 @@ app.use("/listClients", listClientRoute);
 
 import statusRoute from "./routes/statusRoutes.js";
 app.use("/status", statusRoute);
+
+import benefitRoute from "./routes/benefitRoutes.js";
+app.use("/benefits", benefitRoute);
+
+import tourRoute from "./routes/tourRoutes.js";
+app.use("/tours", tourRoute);
 
 export default app;

@@ -16,7 +16,7 @@ const createStatus = async (req, res) => {
     const savedStatus = await newStatus.save();
 
     res.status(201).send({
-      message: "Status Created", // Corrigido para "Status Created"
+      message: "Status Created",
       statusCode: 201,
       data: savedStatus,
     });
