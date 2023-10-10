@@ -89,16 +89,68 @@ const createClient = async (req, res) => {
 // UPDATED
 const updateClientById = async (req, res) => {
   try {
-    //acess the id user and find the user on the database then update the user
-    //findByIdAndUpdate() document id, information to update
-    const updateClientById = await Client.findByIdAndUpdate(
+    // Primeiro, atualize os campos de nome e CPF
+    const updateData = {
+      name: req.body.name,
+      CPF: req.body.CPF,
+    };
+
+    // Em seguida, atualize os campos de contato e endereço
+    if (req.body.contacts && req.body.contacts.length > 0) {
+      const updatedContacts = [];
+
+      for (const contactData of req.body.contacts) {
+        const updatedContact = await Contact.findByIdAndUpdate(
+          contactData._id, // Use o ID do contato para atualização
+          {
+            email: contactData.email,
+            telephone: contactData.telephone,
+          },
+          { new: true } // Para obter o objeto atualizado
+        );
+
+        if (!updatedContact) {
+          return res.status(404).send({ message: "Contato não encontrado" });
+        }
+
+        // Atualize o endereço do contato
+        const updatedAddress = await Address.findByIdAndUpdate(
+          updatedContact.address, // Use o ID do endereço associado ao contato
+          {
+            state: contactData.address.state,
+            city: contactData.address.city,
+            neighborhood: contactData.address.neighborhood,
+            street: contactData.address.street,
+            number: contactData.address.number,
+            complement: contactData.address.complement,
+          },
+          { new: true } // Para obter o objeto atualizado
+        );
+
+        if (!updatedAddress) {
+          return res.status(404).send({ message: "Endereço não encontrado" });
+        }
+
+        updatedContacts.push(updatedContact);
+      }
+
+      updateData.contacts = updatedContacts.map((contact) => contact._id);
+    }
+
+    // Agora, atualize o cliente com os novos dados
+    const updatedClient = await Client.findByIdAndUpdate(
       req.params.id,
-      req.body
+      updateData,
+      { new: true }
     );
 
-    // send a response
+    if (!updatedClient) {
+      return res.status(404).send({ message: "Cliente não encontrado" });
+    }
+
     res.status(200).send({
-      message: "Client updated",
+      message: "Cliente atualizado",
+      data: updatedClient,
       statusCode: 200,
     });
   } catch (error) {
