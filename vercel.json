@@ -1,6 +1,1 @@
-{
-    "routes": [
-      { "src": "/orders",
-      "dest": "/orders" }
-    ]
-  }
+{ "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }] }
