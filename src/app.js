@@ -35,4 +35,11 @@ app.use("/benefits", benefitRoute);
 import tourRoute from "./routes/tourRoutes.js";
 app.use("/tours", tourRoute);
 
+import handlerRoute from "./routes/handler.js";
+app.use("/handler", handlerRoute);
+
+app.use("/teste", (req, res) => {
+  res.send("Essa é uma rota de teste");
+});
+
 export default app;
