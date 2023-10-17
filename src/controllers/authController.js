@@ -1,5 +1,5 @@
 import UserSchema from "../models/userSchema.js";
-import bcrypt from "../../node_modules/bcryptjs";
+import bcrypt from "../../node_modules/bcryptjs/index.js";
 import jwt from "jsonwebtoken";
 
 const SECRET = process.env.SECRET;
